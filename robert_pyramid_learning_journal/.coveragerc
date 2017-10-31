@@ -1,0 +1,3 @@
+[run]
+source = robert_pyramid_learning_journal
+omit = robert_pyramid_learning_journal/test*
