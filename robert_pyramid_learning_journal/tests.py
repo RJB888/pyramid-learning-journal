@@ -3,10 +3,10 @@
 from pyramid.testing import DummyRequest
 from pyramid.response import Response
 
-from views.default import list_view
-from views.default import detail_view
-from views.default import create_view
-from views.default import update_view
+from .views.default import list_view
+from .views.default import detail_view
+from .views.default import create_view
+from .views.default import update_view
 
 
 def test_list_view_returns_response():

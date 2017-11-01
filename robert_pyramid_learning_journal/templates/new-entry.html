@@ -6,9 +6,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Pyramid Learning Journal, CF 401">
-    <meta name="author" content="Chelsea Dole">
+    <meta name="author" content="Rob Bronson">
 
-    <title>Chelsea Dole</title>
+    <title>Rob Bronson</title>
 
     <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -30,10 +30,10 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link" href="homepage.html">Home</a>
+              <a class="nav-link" href="/">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="new-entry.html">Create New Entry</a>
+              <a class="nav-link" href="/journal/new-entry">Create New Entry</a>
             </li>
           </ul>
         </div>
@@ -41,13 +41,12 @@
     </nav>
 
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+    <header class="masthead" style="background-image: url('../static/img/new-entry.jpg')">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="site-heading">
-              <h1>Pyramid Learning Journal</h1>
-              <span class="subheading">Chelsea Dole</span>
+              <h2>New Entry</h2>
             </div>
           </div>
         </div>
@@ -58,43 +57,16 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="post-preview">
-            <a href="detail-entry.html">
-              <h2 class="post-title">
-                Code 401, Day 01
-              </h2>
-            </a>
-            <p class="post-meta">Posted by
-              <a href="">Chelsea Dole</a>
-              on 10/16/2017</p>
-          </div>
-          <hr>
-          <div class="post-preview">
-            <a href="detail-entry.html">
-              <h2 class="post-title">
-                Code 401, Day 02
-              </h2>
-            </a>
-            <p class="post-meta">Posted by
-              <a href="">Chelsea Dole</a>
-              on 10/17/2017</p>
-          </div>
-          <hr>
-          <div class="post-preview">
-            <a href="detail-entry.html">
-              <h2 class="post-title">
-                Code 401, Day 03
-              </h2>
-            </a>
-            <p class="post-meta">Posted by
-              <a href="">Chelsea Dole</a>
-              on 10/18/2017</p>
-          </div>
+            <form>
+                <p>Title:</p>
+                <input type="text" name="Title">
+                <p>Body:</p>
+                <input type="text" name="Journal Body">
+                <br><br>
+                <input type="submit" name="Submit">
+            </form>
           <hr>
           <!-- Pager -->
-          <div class="clearfix">
-            <a class="btn btn-secondary float-right" href="#">Older Posts &rarr;</a>
-          </div>
         </div>
       </div>
     </div>
@@ -108,7 +80,7 @@
           <div class="col-lg-8 col-md-10 mx-auto">
             <ul class="list-inline text-center">
               <li class="list-inline-item">
-                <a href="www.facebook.com/chelsea.dole">
+                <a href="www.facebook.com/">
                   <span class="fa-stack fa-lg">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
@@ -116,7 +88,7 @@
                 </a>
               </li>
               <li class="list-inline-item">
-                <a href="www.github.com/chelseadole">
+                <a href="www.github.com/">
                   <span class="fa-stack fa-lg">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <i class="fa fa-github fa-stack-1x fa-inverse"></i>
@@ -124,7 +96,7 @@
                 </a>
               </li>
             </ul>
-            <p class="copyright text-muted">Copyright &copy; Chelsea Dole 2017</p>
+            <p class="copyright text-muted">Copyright &copy; Rob Bronson 2017</p>
           </div>
         </div>
       </div>

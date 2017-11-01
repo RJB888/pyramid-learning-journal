@@ -1,3 +1,5 @@
+"""Initialize setup of python."""
+
 import os
 
 from setuptools import setup, find_packages
@@ -25,6 +27,7 @@ tests_require = [
     'WebTest >= 1.3.1',  # py3 compat
     'pytest',
     'pytest-cov',
+    'tox'
 ]
 
 setup(
