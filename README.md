@@ -1,4 +1,4 @@
-# pyramid-learning-journal
+
 
 # Pyramid Learning Journal 
 ### Code Fellows, Python 401
