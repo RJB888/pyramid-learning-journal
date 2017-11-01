@@ -1,0 +1,5 @@
+#!/bin/bash
+set -e
+cd robert_pyramid_learning_journal
+python setup.py develop
+python runapp.py
