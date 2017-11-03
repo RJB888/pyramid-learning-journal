@@ -39,13 +39,11 @@ def detail_view(request):
     """Parse file path and pass it to response to serve home page."""
     post_id = int(request.matchdict['id'])
     # if post_id not in POST:
-    print(post_id)
     for post in POST:
         if post['id'] == post_id:
             return {'ljpost': post,
                     'title': post.title,
                     'image': 'post-bg.jpg'}
-
     raise HTTPNotFound
 
 
