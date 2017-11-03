@@ -1,37 +1,78 @@
-"""Tests for pyramid."""
+"""Test files for Pyramid Learning Journal."""
 
-from pyramid.testing import DummyRequest
-from pyramid.response import Response
-
-from robert_pyramid_learning_journal.views.default import list_view
-from robert_pyramid_learning_journal.views.default import detail_view
-from robert_pyramid_learning_journal.views.default import create_view
-from robert_pyramid_learning_journal.views.default import update_view
+from __future__ import unicode_literals
+from pyramid import testing
+import pytest
 
 
-def test_list_view_returns_response():
+@pytest.fixture
+def dummy_request():
+    """Create dummy request fixture."""
+    return testing.DummyRequest()
+
+
+def test_list_view_response_status_200_ok(dummy_request):
     """Test list view."""
-    req = DummyRequest()
-    response = list_view(req)
-    assert isinstance(response, Response)
+    from robert_pyramid_learning_journal.views.default import list_view
+    response = list_view(dummy_request)
+    assert response.status_code == 200
 
 
-def test_detail_view_returns_response():
-    """Test detail view."""
-    req = DummyRequest()
-    response = detail_view(req)
-    assert isinstance(response, Response)
+def test_list_view_response_is_html(dummy_request):
+    """Test html contents in list view."""
+    from robert_pyramid_learning_journal.views.default import list_view
+    response = list_view(dummy_request)
+    assert response.content_type == 'text/html'
 
 
-def test_create_view_returns_response():
-    """Test create view."""
-    req = DummyRequest()
-    response = create_view(req)
-    assert isinstance(response, Response)
+def test_list_view_response_body_includes_our_page(dummy_request):
+    """Test html contents in list view are the correct ones."""
+    from robert_pyramid_learning_journal.views.default import list_view
+    response = list_view(dummy_request)
+    the_tag = '<h1>Robert Bronson, Learning Journal</h1>'
+    assert the_tag in response.ubody
 
 
-def test_update_view_returns_response():
-    """Test update view."""
-    req = DummyRequest()
-    response = update_view(req)
-    assert isinstance(response, Response)
+def test_detail_view_response_body_includes_our_page(dummy_request):
+    """Test html contents in list view are the correct ones."""
+    from robert_pyramid_learning_journal.views.default import detail_view
+    response = detail_view(dummy_request)
+    the_tag = '<h1>LJ1</h1>'
+    assert the_tag in response.ubody
+
+
+def test_create_view_response_body_includes_our_page(dummy_request):
+    """Test html contents in list view are the correct ones."""
+    from robert_pyramid_learning_journal.views.default import create_view
+    response = create_view(dummy_request)
+    the_tag = '<h2>Create New Entry</h2>'
+    assert the_tag in response.ubody
+
+
+def test_update_view_response_body_includes_our_page(dummy_request):
+    """Test html contents in list view are the correct ones."""
+    from robert_pyramid_learning_journal.views.default import update_view
+    response = update_view(dummy_request)
+    the_tag = '<p>Title:</p>'
+    assert the_tag in response.ubody
+
+
+def test_detail_view_response_status_200_ok(dummy_request):
+    """Test detail view response status."""
+    from robert_pyramid_learning_journal.views.default import detail_view
+    response = detail_view(dummy_request)
+    assert response.status_code == 200
+
+
+def test_create_view_response_status_200_ok(dummy_request):
+    """Test list view."""
+    from robert_pyramid_learning_journal.views.default import create_view
+    response = create_view(dummy_request)
+    assert response.status_code == 200
+
+
+def test_update_view_response_status_200_ok(dummy_request):
+    """Test list view."""
+    from robert_pyramid_learning_journal.views.default import update_view
+    response = update_view(dummy_request)
+    assert response.status_code == 200
