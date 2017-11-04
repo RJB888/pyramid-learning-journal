@@ -1,4 +1,3 @@
-
 {% extends "layout.jinja2" %}
 {% block content %}
 
@@ -7,9 +6,9 @@
         <div class="col-lg-8 col-md-10 mx-auto">
             <form>
                 <p>Title:</p>
-                <input type="text" value="{{ title }}">
+                <input type="text" value="{{ ljpost.title }}">
                 <p>Body:</p>
-                <input type="text" value="{{ ljposts }}">
+                <textarea style="width: 100%;" type="text">{{ ljpost.body }}</textarea>
                 <br><br>
                 <input type="submit" name="Submit">
             </form>
