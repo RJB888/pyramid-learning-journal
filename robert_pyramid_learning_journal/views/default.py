@@ -2,28 +2,10 @@
 from pyramid.view import view_config
 from datetime import datetime
 from pyramid.httpexceptions import HTTPNotFound
-from .data.lj_entries import ENTRIES
+from ..data.lj_entries import ENTRIES
 
 
 FMT = "%m/%d/%Y"
-
-# POST = [
-#     {'creation_date': datetime.strptime('11/1/2017', FMT),
-#      'title': 'LJ1', 'author': 'robert Mother-Effin bronson',
-#      'body': 'I am the baddest b!tch on the block.', 'id': 1},
-#     {'creation_date': datetime.strptime('11/1/2017', FMT),
-#      'title': 'LJ1', 'author': 'robert Mother-Effin bronson',
-#      'body': 'I am the baddest b!tch on the block.', 'id': 2},
-#     {'creation_date': datetime.strptime('11/1/2017', FMT),
-#      'title': 'LJ1', 'author': 'robert Mother-Effin bronson',
-#      'body': 'I am the baddest b!tch on the block.', 'id': 3},
-#     {'creation_date': datetime.strptime('11/1/2017', FMT),
-#      'title': 'LJ1', 'author': 'robert Mother-Effin bronson',
-#      'body': 'I am the baddest b!tch on the block.', 'id': 4},
-#     {'creation_date': datetime.strptime('11/1/2017', FMT),
-#      'title': 'LJ1', 'author': 'robert Mother-Effin bronson',
-#      'body': 'I am the baddest b!tch on the block.', 'id': 5}
-# ]
 
 
 @view_config(route_name='list_view',
@@ -32,7 +14,7 @@ def list_view(request):
     """Parse file path and pass it to response to serve home page."""
     return {'ljposts': ENTRIES,
             'title': 'robert LJ',
-            'image': "home-bg.jpg"}
+            'image': "assault.jpg"}
 
 
 @view_config(route_name='detail_view',
@@ -44,7 +26,7 @@ def detail_view(request):
         if post['id'] == post_id:
             return {'ljpost': post,
                     'title': post['title'],
-                    'image': 'post-bg.jpg'}
+                    'image': 'patrol.jpg'}
 
     raise HTTPNotFound
 
@@ -55,7 +37,7 @@ def create_view(request):
     """Parse file path and pass it to response to serve home page."""
     # does anything go here??
     return {'title': 'Create New Entry',
-            'image': 'new-entry.jpg'}
+            'image': 'scout.jpg'}
 
 
 @view_config(route_name='update_view',
@@ -69,6 +51,6 @@ def update_view(request):
         if post['id'] == post_id:
             return {'ljpost': post['body'],
                     'title': post['title'],
-                    'image': 'post-bg.jpg'}
+                    'image': 'saber.jpg'}
 
     raise HTTPNotFound
