@@ -1,45 +1,9 @@
-"""Tests for pyramid."""
-
-# from pyramid.testing import DummyRequest
-# from pyramid.response import Response
-
-# from .views.default import list_view
-# from .views.default import detail_view
-# from .views.default import create_view
-# from .views.default import update_view
-
-
-# def test_list_view_returns_response():
-#     """Test list view."""
-#     req = DummyRequest()
-#     response = list_view(req)
-#     assert isinstance(response, Response)
-
-
-# def test_detail_view_returns_response():
-#     """Test detail view."""
-#     req = DummyRequest()
-#     response = detail_view(req)
-#     assert isinstance(response, Response)
-
-
-# def test_create_view_returns_response():
-#     """Test create view."""
-#     req = DummyRequest()
-#     response = create_view(req)
-#     assert isinstance(response, Response)
-
-
-# def test_update_view_returns_response():
-#     """Test update view."""
-#     req = DummyRequest()
-#     response = update_view(req)
-#     assert isinstance(response, Response)
-
+"""Test files for Pyramid Learning Journal."""
 
 from __future__ import unicode_literals
 from pyramid import testing
 import pytest
+from pyramid.httpexceptions import HTTPNotFound
 
 
 @pytest.fixture
@@ -48,68 +12,98 @@ def dummy_request():
     return testing.DummyRequest()
 
 
-def test_list_view_response_status_200_ok(dummy_request):
-    """Test list view."""
-    from chelsea_pyramid_learning_journal.views.default import list_view
+
+def test_list_view_response_title(dummy_request):
+    """Test list view response of title."""
+    from robert_pyramid_learning_journal.views.default import list_view
     response = list_view(dummy_request)
-    assert response.status_code == 200
+    assert response['title'] == 'Python 401 Learning Journal'
 
 
-def test_list_view_response_is_html(dummy_request):
-    """Test html contents in list view."""
-    from chelsea_pyramid_learning_journal.views.default import list_view
+def test_list_view_response_is_a_dictionary(dummy_request):
+    """Test that response to list_view is a dictionary."""
+    from robert_pyramid_learning_journal.views.default import list_view
     response = list_view(dummy_request)
-    assert response.content_type == 'text/html'
+    assert isinstance(response, dict)
 
 
-def test_list_view_response_body_includes_our_page(dummy_request):
-    """Test html contents in list view are the correct ones."""
-    from chelsea_pyramid_learning_journal.views.default import list_view
+def test_list_view_response_has_good_img(dummy_request):
+    """Test that response to list_view has the right image."""
+    from robert_pyramid_learning_journal.views.default import list_view
     response = list_view(dummy_request)
-    the_tag = '<h1>Pyramid Learning Journal</h1>'
-    assert the_tag in response.ubody
+    assert response['image'] == 'assault.jpg'
 
 
-def test_detail_view_response_body_includes_our_page(dummy_request):
-    """Test html contents in list view are the correct ones."""
-    from chelsea_pyramid_learning_journal.views.default import detail_view
+def test_list_view_response_has_a_post(dummy_request):
+    """Test that response to list_view has the right image."""
+    from robert_pyramid_learning_journal.views.default import list_view
+    from robert_pyramid_learning_journal.data.lj_entries import ENTRIES
+    response = list_view(dummy_request)
+    assert response['ljposts'] == ENTRIES
+
+
+def test_detail_view_has_correct_keys(dummy_request):
+    """Test that response to detail_view has the correct keys."""
+    from robert_pyramid_learning_journal.views.default import detail_view
+    dummy_request.matchdict['id'] = 1
     response = detail_view(dummy_request)
-    the_tag = '<h1>CF 401, Day 01</h1>'
-    assert the_tag in response.ubody
+    assert 'image' in response
+    assert 'ljpost' in response
+    assert 'image' in response
 
 
-def test_create_view_response_body_includes_our_page(dummy_request):
-    """Test html contents in list view are the correct ones."""
-    from chelsea_pyramid_learning_journal.views.default import create_view
+def test_http_not_found(dummy_request):
+    """Test that response to detail_view has the correct keys."""
+    from robert_pyramid_learning_journal.views.default import detail_view
+    dummy_request.matchdict['id'] = -10
+    with pytest.raises(HTTPNotFound):
+        assert detail_view(dummy_request)
+
+
+def test_create_view_has_correct_response(dummy_request):
+    """Test that response to create_view_has_correct routing."""
+    from robert_pyramid_learning_journal.views.default import create_view
+    dummy_request.matchdict['id'] = 4
     response = create_view(dummy_request)
-    the_tag = '<h2>New Entry</h2>'
-    assert the_tag in response.ubody
+    assert response['title'] == 'Create New Entry'
 
 
-def test_update_view_response_body_includes_our_page(dummy_request):
-    """Test html contents in list view are the correct ones."""
-    from chelsea_pyramid_learning_journal.views.default import update_view
-    response = update_view(dummy_request)
-    the_tag = '<p>Title:</p>'
-    assert the_tag in response.ubody
-
-
-def test_detail_view_response_status_200_ok(dummy_request):
-    """Test detail view response status."""
-    from chelsea_pyramid_learning_journal.views.default import detail_view
-    response = detail_view(dummy_request)
-    assert response.status_code == 200
-
-
-def test_create_view_response_status_200_ok(dummy_request):
-    """Test list view."""
-    from chelsea_pyramid_learning_journal.views.default import create_view
+def test_new_entry_works_with_a_specific_entry(dummy_request):
+    """Test that response to create_view has the correct value."""
+    from robert_pyramid_learning_journal.views.default import create_view
+    dummy_request.matchdict['id'] = 7
     response = create_view(dummy_request)
-    assert response.status_code == 200
+    assert response['image'] == 'scout.jpg'
 
 
-def test_update_view_response_status_200_ok(dummy_request):
-    """Test list view."""
-    from chelsea_pyramid_learning_journal.views.default import update_view
+def test_update_entry_works_for_response_title(dummy_request):
+    """Test that response to update_view has the correct title."""
+    from robert_pyramid_learning_journal.views.default import update_view
+    dummy_request.matchdict['id'] = 10
     response = update_view(dummy_request)
-    assert response.status_code == 200
+    assert response['title'] == 'Day 10  Brain cleanup?'
+
+
+def test_update_entry_post_content_loads_correctly(dummy_request):
+    """Test that response to update_view has the correct post."""
+    from robert_pyramid_learning_journal.views.default import update_view
+    dummy_request.matchdict['id'] = 12
+    response = update_view(dummy_request)
+    assert response['image'] == 'saber.jpg'
+
+
+def test_update_entry_raises_http_error(dummy_request):
+    """Test that response to update_view raises httperror."""
+    from robert_pyramid_learning_journal.views.default import update_view
+    dummy_request.matchdict['id'] = 5000
+    with pytest.raises(HTTPNotFound):
+        assert update_view(dummy_request)
+
+
+def test_update_entry_error_type(dummy_request):
+    """Test that httperror is 404."""
+    from robert_pyramid_learning_journal.views.default import update_view
+    dummy_request.matchdict['id'] = 2345
+    with pytest.raises(HTTPNotFound):
+        request = update_view(dummy_request)
+        request.response.status = 404
