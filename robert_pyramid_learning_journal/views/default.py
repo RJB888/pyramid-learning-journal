@@ -13,7 +13,7 @@ FMT = "%m/%d/%Y"
 def list_view(request):
     """Parse file path and pass it to response to serve home page."""
     return {'ljposts': ENTRIES,
-            'title': 'robert LJ',
+            'title': 'Python 401 Learning Journal',
             'image': "assault.jpg"}
 
 
