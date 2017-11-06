@@ -19,7 +19,6 @@ pyramid-tm==2.2
 pytest==3.2.3
 pytest-cov==2.5.1
 repoze.lru==0.7
--e git+https://github.com/RJB888/pyramid-learning-journal.git@4bea3dc5ee385b8a190d81d573436e0c2c07b88d#egg=robert_pyramid_learning_journal
 six==1.11.0
 SQLAlchemy==1.1.14
 tox==2.9.1

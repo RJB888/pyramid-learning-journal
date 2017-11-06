@@ -2,7 +2,8 @@
 from pyramid.view import view_config
 from datetime import datetime
 from pyramid.httpexceptions import HTTPNotFound
-from ..data.lj_entries import ENTRIES
+# from ..data.lj_entries import ENTRIES
+from ..models.mymodel import JournalEntry
 
 
 FMT = "%m/%d/%Y"
@@ -12,7 +13,8 @@ FMT = "%m/%d/%Y"
              renderer='robert_pyramid_learning_journal:templates/homepage.jinja2')
 def list_view(request):
     """Parse file path and pass it to response to serve home page."""
-    return {'ljposts': ENTRIES,
+    j_entries = request.dbsession.query(JournalEntry).all()
+    return {'ljposts': j_entries,
             'title': 'Python 401 Learning Journal',
             'image': "assault.jpg"}
 
@@ -22,12 +24,10 @@ def list_view(request):
 def detail_view(request):
     """Parse file path and pass it to response to serve home page."""
     post_id = int(request.matchdict['id'])
-    for post in ENTRIES:
-        if post['id'] == post_id:
-            return {'ljpost': post,
-                    'title': post['title'],
-                    'image': 'patrol.jpg'}
-
+    entry = request.dbsession.query(JournalEntry).get(post_id)
+    return {'ljpost': entry,
+            'title': entry.title,
+            'image': 'patrol.jpg'}
     raise HTTPNotFound
 
 
@@ -47,10 +47,9 @@ def update_view(request):
     # get post ID from detail_view page... import it?
     # do same filter fn from detail_view
     post_id = int(request.matchdict['id'])
-    for post in ENTRIES:
-        if post['id'] == post_id:
-            return {'ljpost': post['body'],
-                    'title': post['title'],
-                    'image': 'saber.jpg'}
+    entry = request.dbsession.query(JournalEntry).get(post_id)
+    return {'ljpost': entry.body,
+            'title': entry.title,
+            'image': 'saber.jpg'}
 
     raise HTTPNotFound
