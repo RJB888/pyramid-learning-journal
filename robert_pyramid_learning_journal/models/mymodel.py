@@ -16,7 +16,7 @@ from .meta import Base
 
 
 class JournalEntry(Base):
-    __tablename__ = 'JournalEntries'
+    __tablename__ = 'journals'
     id = Column(Integer, primary_key=True)
     title = Column(Text)
     body = Column(Text)
