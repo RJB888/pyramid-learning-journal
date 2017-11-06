@@ -8,6 +8,7 @@ PasteDeploy==1.5.2
 plaster==1.0
 plaster-pastedeploy==0.4.1
 pluggy==0.5.2
+psycopg2==2.7.3.2
 py==1.4.34
 Pygments==2.2.0
 pyramid==1.9.1
@@ -19,6 +20,7 @@ pyramid-tm==2.2
 pytest==3.2.3
 pytest-cov==2.5.1
 repoze.lru==0.7
+-e git+https://github.com/RJB888/pyramid-learning-journal.git@24a09664b8dc7cd27019e93534ca4e0b5438f23c#egg=robert_pyramid_learning_journal
 six==1.11.0
 SQLAlchemy==1.1.14
 tox==2.9.1
