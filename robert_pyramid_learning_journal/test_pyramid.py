@@ -58,7 +58,6 @@ def test_list_view_response_title(dummy_request):
     """Test list view response of title."""
     from robert_pyramid_learning_journal.views.default import list_view
     response = list_view(dummy_request)
-
     assert response['title'] == 'Python 401 Learning Journal'
 
 
@@ -146,15 +145,6 @@ def test_update_entry_post_content_loads_correctly(dummy_request, testdb):
 #     dummy_request.matchdict['id'] = 5000
 #     with pytest.raises(HTTPNotFound):
 #         assert update_view(dummy_request)
-
-
-# def test_update_entry_error_type(dummy_request):
-#     """Test that httperror is 404."""
-#     from robert_pyramid_learning_journal.views.default import update_view
-#     dummy_request.matchdict['id'] = 2345
-#     with pytest.raises(HTTPNotFound):
-#         request = update_view(dummy_request)
-#         request.response.status = 404
 
 
 from pyramid.config import Configurator
