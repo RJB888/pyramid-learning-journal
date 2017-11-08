@@ -89,6 +89,7 @@ def test_list_view_response_has_a_post(dummy_request, testdb):
     response = list_view(dummy_request)
     assert response['ljposts'][0].title == 'new entry'
 
+
 def test_detail_view_has_correct_keys(dummy_request, testdb):
     """Test that response to detail_view has the correct keys."""
     from robert_pyramid_learning_journal.views.default import detail_view
@@ -98,13 +99,6 @@ def test_detail_view_has_correct_keys(dummy_request, testdb):
     assert 'ljpost' in response
     assert 'image' in response
 
-
-# def test_http_not_found(dummy_request):
-#     """Test that response to detail_view has the correct keys."""
-#     from robert_pyramid_learning_journal.views.default import detail_view
-#     dummy_request.matchdict['id'] = -10
-#     with pytest.raises(HTTPNotFound):
-#         assert detail_view(dummy_request)
 
 
 def test_create_view_has_correct_response(dummy_request):
@@ -139,14 +133,6 @@ def test_update_entry_post_content_loads_correctly(dummy_request, testdb):
     assert response['image'] == 'saber.jpg'
 
 
-# def test_update_entry_raises_http_error(dummy_request):
-#     """Test that response to update_view raises httperror."""
-#     from robert_pyramid_learning_journal.views.default import update_view
-#     dummy_request.matchdict['id'] = 5000
-#     with pytest.raises(HTTPNotFound):
-#         assert update_view(dummy_request)
-
-
 from pyramid.config import Configurator
 
 
@@ -160,8 +146,10 @@ def main(global_config, **settings):
     config.scan()
     return config.make_wsgi_app()
 
+
 @pytest.fixture
 def testapp(request):
+    """Build the testapp."""
     from webtest import TestApp
     app = main({})
     SessionFactory = app.registry["dbsession_factory"]
@@ -175,8 +163,10 @@ def testapp(request):
 
     return TestApp(app)
 
+
 @pytest.fixture
 def dbdata(testapp):
+    """Handle database data with testapp."""
     from .models import get_tm_session
     SessionFactory = testapp.app.registry["dbsession_factory"]
     with transaction.manager:
@@ -185,6 +175,29 @@ def dbdata(testapp):
 
 
 def test_get_home_route_returns_200_status(testapp, dbdata):
+    """Test that the home route returns a 200 ok status."""
     response = testapp.get('/')
     assert response.status_code == 200
-    import pdb; pdb.set_trace()
+
+def test_http_not_found(testapp, dbdata):
+    """Test that response to detail_view has the correct keys."""
+    from robert_pyramid_learning_journal.views.default import detail_view
+    response = testapp.get('/home')
+    assert response.status_code == 404
+
+# def test_update_entry_raises_http_error(dummy_request):
+#     """Test that response to update_view raises httperror."""
+#     from robert_pyramid_learning_journal.views.default import update_view
+#     dummy_request.matchdict['id'] = 5000
+#     with pytest.raises(HTTPNotFound):
+#         assert update_view(dummy_request)
+
+
+# def test_update_entry_error_type(dummy_request):
+#     """Test that httperror is 404."""
+#     from robert_pyramid_learning_journal.views.default import update_view
+#     dummy_request.matchdict['id'] = 2345
+#     with pytest.raises(HTTPNotFound):
+#         request = update_view(dummy_request)
+#         request.response.status = 404
+

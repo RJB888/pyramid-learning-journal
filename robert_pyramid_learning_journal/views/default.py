@@ -2,17 +2,18 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound, HTTPBadRequest
 # from ..data.lj_entries import ENTRIES
-from ..models.mymodel import JournalEntry
+from robert_pyramid_learning_journal.models.mymodel import JournalEntry
 
 
 FMT = "%m/%d/%Y"
 
 
 @view_config(route_name='list_view',
-             renderer='robert_pyramid_learning_journal:templates/homepage.jinja2')
+             renderer='robert_pyramid_learning_journal:\
+                       templates/homepage.jinja2')
 def list_view(request):
     """Parse file path and pass it to response to serve home page."""
-    j_entries = request.dbsession.query(JournalEntry).all()
+    j_entries = request.dbsession.query(JournalEntry).order_by(JournalEntry.date.desc()).all()
     return {'ljposts': j_entries,
             'title': 'Python 401 Learning Journal',
             'image': "assault.jpg"}
@@ -41,21 +42,21 @@ def create_view(request):
                     'image': 'scout.jpg'}
 
     if request.method == "POST":
-        if not all([field in request.POST for field in ['Title', 'Journal Body']]):
+        if not all([field in request.POST for field in ['Title',
+                                                        'Journal Body']]):
             raise HTTPBadRequest
         new_post = JournalEntry(
             title=request.POST['Title'],
             body=request.POST['Journal Body'],
         )
         request.dbsession.add(new_post)
-        return HTTPFound(request.route_url('/'))
+        return HTTPFound(request.route_url('list_view'))
 
 
 @view_config(route_name='update_view',
              renderer='robert_pyramid_learning_journal:templates/edit-entry.jinja2')
 def update_view(request):
     """Parse file path and pass it to response to serve home page."""
-
     post_id = int(request.matchdict['id'])
     entry = request.dbsession.query(JournalEntry).get(post_id)
     if not entry:
@@ -66,11 +67,11 @@ def update_view(request):
                 'image': 'saber.jpg'}
 
     if request.method == "POST":
-        if not all([field in request.POST for field in ['Title', 'Journal Body']]):
+        if not all([field in request.POST for field in ['Title',
+                                                        'Journal Body']]):
             raise HTTPBadRequest
-        post = JournalEntry(
-            title=request.POST['Title'],
-            body=request.POST['Journal Body'],
-        )
-        request.dbsession.add(post)
-        return HTTPFound(request.route_url('/'))
+        entry.title = request.POST['Title'],
+        entry.body = request.POST['Journal Body'],
+        request.dbsession.add(entry)
+        request.dbsession.flush()
+        return HTTPFound(request.route_url('detail_view', id=post_id))
