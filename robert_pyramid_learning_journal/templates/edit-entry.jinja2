@@ -6,9 +6,9 @@
         <div class="col-lg-8 col-md-10 mx-auto">
             <form method="POST">
                 <p>Title:</p>
-                <input type="text" value="{{ title }}">
+                <input type="text" value="{{ title }}" name="Title">
                 <p>Body:</p>
-                <textarea style="width: 100%;" type="text">{{ ljpost }}</textarea>
+                <textarea style="width: 100%;" type="text" name="Journal Body">{{ ljpost }}</textarea>
                 <br><br>
                 <input type="submit" name="Submit">
             </form>
