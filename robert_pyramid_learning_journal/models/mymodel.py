@@ -7,14 +7,6 @@ from sqlalchemy import (
 
 from .meta import Base
 
-
-# class MyModel(Base):
-#     __tablename__ = 'models'
-#     id = Column(Integer, primary_key=True)
-#     name = Column(Text)
-#     value = Column(Integer)
-
-
 class JournalEntry(Base):
     __tablename__ = 'journals'
     id = Column(Integer, primary_key=True)
