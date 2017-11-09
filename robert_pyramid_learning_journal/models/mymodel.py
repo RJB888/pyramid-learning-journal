@@ -1,26 +1,24 @@
+"""Establish data model for database."""
+
 from sqlalchemy import (
     Column,
-    Index,
     Integer,
     Text,
+    DateTime
 )
 
 from .meta import Base
+from datetime import datetime
 
-
-# class MyModel(Base):
-#     __tablename__ = 'models'
-#     id = Column(Integer, primary_key=True)
-#     name = Column(Text)
-#     value = Column(Integer)
+FMT = "%m/%d/%Y"
 
 
 class JournalEntry(Base):
+    """Create the model for the Journal Entry."""
+
     __tablename__ = 'journals'
     id = Column(Integer, primary_key=True)
     title = Column(Text)
     body = Column(Text)
-    author = Column(Text)
-    date = Column(Text)
-
-# Index('my_index', JournalEntry.title, unique=True, mysql_length=255)
+    author = Column(Text, default="Robert Bronson")
+    date = Column(DateTime, default=datetime.today())

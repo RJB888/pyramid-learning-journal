@@ -1,9 +1,8 @@
 """Create callables for calling routes."""
 from pyramid.view import view_config
-from datetime import datetime
-from pyramid.httpexceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPNotFound, HTTPFound, HTTPBadRequest
 # from ..data.lj_entries import ENTRIES
-from ..models.mymodel import JournalEntry
+from robert_pyramid_learning_journal.models.mymodel import JournalEntry
 
 
 FMT = "%m/%d/%Y"
@@ -13,7 +12,7 @@ FMT = "%m/%d/%Y"
              renderer='robert_pyramid_learning_journal:templates/homepage.jinja2')
 def list_view(request):
     """Parse file path and pass it to response to serve home page."""
-    j_entries = request.dbsession.query(JournalEntry).all()
+    j_entries = request.dbsession.query(JournalEntry).order_by(JournalEntry.date.desc()).all()
     return {'ljposts': j_entries,
             'title': 'Python 401 Learning Journal',
             'image': "assault.jpg"}
@@ -36,20 +35,42 @@ def detail_view(request):
 def create_view(request):
     """Parse file path and pass it to response to serve home page."""
     # does anything go here??
-    return {'title': 'Create New Entry',
-            'image': 'scout.jpg'}
+
+    if request.method == "GET":
+            return {'title': 'Create New Entry',
+                    'image': 'scout.jpg'}
+
+    if request.method == "POST":
+        if not all([field in request.POST for field in ['Title',
+                                                        'Journal Body']]):
+            raise HTTPBadRequest
+        new_post = JournalEntry(
+            title=request.POST['Title'],
+            body=request.POST['Journal Body'],
+        )
+        request.dbsession.add(new_post)
+        return HTTPFound(request.route_url('list_view'))
 
 
 @view_config(route_name='update_view',
              renderer='robert_pyramid_learning_journal:templates/edit-entry.jinja2')
 def update_view(request):
     """Parse file path and pass it to response to serve home page."""
-    # get post ID from detail_view page... import it?
-    # do same filter fn from detail_view
     post_id = int(request.matchdict['id'])
     entry = request.dbsession.query(JournalEntry).get(post_id)
-    return {'ljpost': entry.body,
-            'title': entry.title,
-            'image': 'saber.jpg'}
+    if not entry:
+        raise HTTPNotFound
+    if request.method == "GET":
+        return {'ljpost': entry.body,
+                'title': entry.title,
+                'image': 'saber.jpg'}
 
-    raise HTTPNotFound
+    if request.method == "POST":
+        if not all([field in request.POST for field in ['Title',
+                                                        'Journal Body']]):
+            raise HTTPBadRequest
+        entry.title = request.POST['Title'],
+        entry.body = request.POST['Journal Body'],
+        request.dbsession.add(entry)
+        request.dbsession.flush()
+        return HTTPFound(request.route_url('detail_view', id=post_id))
