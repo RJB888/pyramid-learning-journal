@@ -180,24 +180,9 @@ def test_get_home_route_returns_200_status(testapp, dbdata):
     assert response.status_code == 200
 
 def test_http_not_found(testapp, dbdata):
-    """Test that response to detail_view has the correct keys."""
-    from robert_pyramid_learning_journal.views.default import detail_view
-    response = testapp.get('/home')
-    assert response.status_code == 404
+    """Test call to detail view with bad index gives 404 error."""
+    assert testapp.get('/journal/300', status=404)
 
-# def test_update_entry_raises_http_error(dummy_request):
-#     """Test that response to update_view raises httperror."""
-#     from robert_pyramid_learning_journal.views.default import update_view
-#     dummy_request.matchdict['id'] = 5000
-#     with pytest.raises(HTTPNotFound):
-#         assert update_view(dummy_request)
-
-
-# def test_update_entry_error_type(dummy_request):
-#     """Test that httperror is 404."""
-#     from robert_pyramid_learning_journal.views.default import update_view
-#     dummy_request.matchdict['id'] = 2345
-#     with pytest.raises(HTTPNotFound):
-#         request = update_view(dummy_request)
-#         request.response.status = 404
-
+def test_update_entry_raises_http_error(testapp, dbdata):
+    """Test that response to update_view raises httperror."""
+    assert testapp.get('/journal/-5/edit-entry', status=404)
