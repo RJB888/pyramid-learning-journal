@@ -3,7 +3,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound, HTTPBadRequest
 from robert_pyramid_learning_journal.models.mymodel import JournalEntry
 from robert_pyramid_learning_journal.security import is_authenticated
-from puyramic.security import remember
+from pyramid.security import remember
 
 FMT = "%m/%d/%Y"
 
