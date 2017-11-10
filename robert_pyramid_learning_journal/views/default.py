@@ -2,7 +2,7 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound, HTTPBadRequest
 from robert_pyramid_learning_journal.models.mymodel import JournalEntry
-from robert_pyramid_learning_journal.security import is_authenticated
+from robert_pyramid_learning_journal.security import isauthenticated
 from pyramid.security import remember
 
 FMT = "%m/%d/%Y"
@@ -79,11 +79,11 @@ def update_view(request):
 @view_config(route_name='login', renderer='robert_pyramid_learning_journal:templates/login.jinja2')
 def login(request):
     if request.method == "GET":
-        return {}
+        return {'image': 'oriental.jpg'}
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
-        if is_authenticated(username, password):
+        if isauthenticated(username, password):
             headers = remember(request, username)
             return HTTPFound(request.route_url('list_view'), headers=headers)
-        return {}
+        return {'image': 'oriental.jpg'}

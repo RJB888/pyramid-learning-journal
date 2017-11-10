@@ -4,7 +4,7 @@ from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 
 
-def includme(config):
+def includeme(config):
     """Set security config."""
     auth_secret = os.environ.get('AUTH_SECRET', '')
     authn_policy = AuthTktAuthenticationPolicy(
@@ -12,7 +12,7 @@ def includme(config):
         hashalg='sha512')
     config.set_authentication_policy(authn_policy)
     authz_policy = ACLAuthorizationPolicy()
-    config.set_authentication_policy(authz_policy)
+    config.set_authorization_policy(authz_policy)
 
 def isauthenticated(username, password):
     """Verify proper username and password."""
