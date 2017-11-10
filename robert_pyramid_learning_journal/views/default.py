@@ -1,9 +1,9 @@
 """Create callables for calling routes."""
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound, HTTPBadRequest
-# from ..data.lj_entries import ENTRIES
 from robert_pyramid_learning_journal.models.mymodel import JournalEntry
-
+from robert_pyramid_learning_journal.security import is_authenticated
+from puyramic.security import remember
 
 FMT = "%m/%d/%Y"
 
@@ -74,3 +74,16 @@ def update_view(request):
         request.dbsession.add(entry)
         request.dbsession.flush()
         return HTTPFound(request.route_url('detail_view', id=post_id))
+
+
+@view_config(route_name='login', renderer='robert_pyramid_learning_journal:templates/login.jinja2')
+def login(request):
+    if request.method == "GET":
+        return {}
+    if request.method == "POST":
+        username = request.POST['username']
+        password = request.POST['password']
+        if is_authenticated(username, password):
+            headers = remember(request, username)
+            return HTTPFound(request.route_url('list_view'), headers=headers)
+        return {}
