@@ -3,7 +3,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPNotFound, HTTPFound, HTTPBadRequest
 from robert_pyramid_learning_journal.models.mymodel import JournalEntry
 from robert_pyramid_learning_journal.security import isauthenticated
-from pyramid.security import remember
+from pyramid.security import remember, forget
 
 FMT = "%m/%d/%Y"
 
@@ -31,7 +31,8 @@ def detail_view(request):
 
 
 @view_config(route_name='create_view',
-             renderer='robert_pyramid_learning_journal:templates/new-entry.jinja2')
+             renderer='robert_pyramid_learning_journal:templates/new-entry.jinja2',
+             permission="secret")
 def create_view(request):
     """Parse file path and pass it to response to serve home page."""
     # does anything go here??
@@ -53,7 +54,8 @@ def create_view(request):
 
 
 @view_config(route_name='update_view',
-             renderer='robert_pyramid_learning_journal:templates/edit-entry.jinja2')
+             renderer='robert_pyramid_learning_journal:templates/edit-entry.jinja2',
+             permission="secret")
 def update_view(request):
     """Parse file path and pass it to response to serve home page."""
     post_id = int(request.matchdict['id'])
@@ -87,3 +89,8 @@ def login(request):
             headers = remember(request, username)
             return HTTPFound(request.route_url('list_view'), headers=headers)
         return {'image': 'oriental.jpg'}
+
+@view_config(route_name='logout')
+def logout(request):
+    headers = forget(request)
+    return HTTPFound(request.route_url('list_view'), headers=headers)
