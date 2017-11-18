@@ -171,7 +171,8 @@ def dbdata(testapp):
     SessionFactory = testapp.app.registry["dbsession_factory"]
     with transaction.manager:
         dbsession = get_tm_session(SessionFactory, transaction.manager)
-        dbsession.add(JournalEntry(title='new entry', body='Was here.', author='Joe', date='11/1/18'))
+        dbsession.add(JournalEntry(title='new entry', body='Was here.',
+                                   author='Joe', date='11/1/18'))
 
 
 def test_get_home_route_returns_200_status(testapp, dbdata):
@@ -179,10 +180,18 @@ def test_get_home_route_returns_200_status(testapp, dbdata):
     response = testapp.get('/')
     assert response.status_code == 200
 
+
 def test_http_not_found(testapp, dbdata):
     """Test call to detail view with bad index gives 404 error."""
     assert testapp.get('/journal/300', status=404)
 
+
 def test_update_entry_raises_http_error(testapp, dbdata):
     """Test that response to update_view raises httperror."""
     assert testapp.get('/journal/-5/edit-entry', status=404)
+
+
+def test_update_entry_raises_http_error_with_bad_index(testapp, dbdata):
+    """Test that response to update_view with bad index raises http error."""
+    assert testapp.get('/journal/-5/edit-entry', status=404)
+

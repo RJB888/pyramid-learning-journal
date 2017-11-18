@@ -27,6 +27,16 @@
             </li>
             {% if request.authenticated_userid %}
             <li class="nav-item">
+              <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Login</a>
+            </li>
+            {% endif %}
+
+            {% if request.authenticated_userid %}
+            <li class="nav-item">
               <a class="nav-link" href="/journal/new-entry">Create New Entry</a>
             </li>
             {% endif %}
