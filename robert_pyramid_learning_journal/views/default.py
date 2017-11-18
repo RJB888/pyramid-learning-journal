@@ -24,9 +24,10 @@ def detail_view(request):
     """Parse file path and pass it to response to serve home page."""
     post_id = int(request.matchdict['id'])
     entry = request.dbsession.query(JournalEntry).get(post_id)
-    return {'ljpost': entry,
-            'title': entry.title,
-            'image': 'patrol.jpg'}
+    if entry:
+        return {'ljpost': entry,
+                'title': entry.title,
+                'image': 'patrol.jpg'}
     raise HTTPNotFound
 
 
@@ -78,8 +79,10 @@ def update_view(request):
         return HTTPFound(request.route_url('detail_view', id=post_id))
 
 
-@view_config(route_name='login', renderer='robert_pyramid_learning_journal:templates/login.jinja2')
+@view_config(route_name='login',
+             renderer='robert_pyramid_learning_journal:templates/login.jinja2')
 def login(request):
+    """."""
     if request.method == "GET":
         return {'image': 'oriental.jpg'}
     if request.method == "POST":
@@ -90,7 +93,9 @@ def login(request):
             return HTTPFound(request.route_url('list_view'), headers=headers)
         return {'image': 'oriental.jpg'}
 
+
 @view_config(route_name='logout')
 def logout(request):
+    """."""
     headers = forget(request)
     return HTTPFound(request.route_url('list_view'), headers=headers)
