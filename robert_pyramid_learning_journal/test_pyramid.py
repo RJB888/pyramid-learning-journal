@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 from pyramid import testing
 import pytest
-from pyramid.httpexceptions import HTTPNotFound
+from pyramid.httpexceptions import HTTPNotFound, HTTPForbidden
 import transaction
 from robert_pyramid_learning_journal.models.mymodel import JournalEntry
 from robert_pyramid_learning_journal.models.meta import Base
@@ -44,7 +44,10 @@ def db_session(configuration, request):
 @pytest.fixture
 def testdb(db_session):
     """."""
-    new_entry = JournalEntry(title='new entry', body='Was here.', author='Joe', date='11/1/18')
+    new_entry = JournalEntry(title='new entry',
+                             body='Was here.',
+                             author='Joe',
+                             date='11/1/18')
     db_session.add(new_entry)
 
 
@@ -98,7 +101,6 @@ def test_detail_view_has_correct_keys(dummy_request, testdb):
     assert 'image' in response
     assert 'ljpost' in response
     assert 'image' in response
-
 
 
 def test_create_view_has_correct_response(dummy_request):
@@ -171,7 +173,8 @@ def dbdata(testapp):
     SessionFactory = testapp.app.registry["dbsession_factory"]
     with transaction.manager:
         dbsession = get_tm_session(SessionFactory, transaction.manager)
-        dbsession.add(JournalEntry(title='new entry', body='Was here.', author='Joe', date='11/1/18'))
+        dbsession.add(JournalEntry(title='new entry', body='Was here.',
+                                   author='Joe', date='11/1/18'))
 
 
 def test_get_home_route_returns_200_status(testapp, dbdata):
@@ -179,10 +182,43 @@ def test_get_home_route_returns_200_status(testapp, dbdata):
     response = testapp.get('/')
     assert response.status_code == 200
 
+
 def test_http_not_found(testapp, dbdata):
     """Test call to detail view with bad index gives 404 error."""
     assert testapp.get('/journal/300', status=404)
 
+
 def test_update_entry_raises_http_error(testapp, dbdata):
     """Test that response to update_view raises httperror."""
     assert testapp.get('/journal/-5/edit-entry', status=404)
+
+
+def test_update_entry_raises_http_error_with_bad_index(testapp, dbdata):
+    """Test that response to update_view with bad index raises http error."""
+    assert testapp.get('/journal/-5/edit-entry', status=404)
+
+
+# def test_create_view_redirects_to_home_on_success(testapp, dbdata):
+#     """."""
+#     testapp.post('/login', {
+#         'username':"rjbronson",
+#         'password':"flergtheblerg"
+#         })
+#     new_entry = {
+#         "title":"New Entry",
+#         "body": "some body words",
+#         "author":"RJB",
+#         "Date":"11/11/11"
+#     }
+#     response = testapp.post("/journal/new-entry", new_entry)
+#     assert response.location == 'http://localhost6543/'
+
+# def test_update_entry_raises_403_if_no_login(testapp):
+#     """Test that response to update_view raises http 403 if not logged in."""
+#     with pytest.raises(HTTPForbidden):
+#         assert testapp.get('/journal/1/edit-entry')
+
+
+# def test_create_entry_raises_403_if_no_login(testapp):
+#     """Test that response to create_view raises http 403 if not logged in."""
+#     assert testapp.get('/journal/new-entry', status=403)

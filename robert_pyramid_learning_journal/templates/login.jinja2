@@ -1,0 +1,17 @@
+{% extends 'layout.jinja2' %}
+
+{% block content %}
+<form method="POST">
+<table>
+    <tr>
+        <td><input type="text" name="username" placeholder="Username"></td>
+    </tr>
+    <tr>
+        <td><input type="password" name="password" placeholder="Password"></td>
+    </tr>
+    <tr>
+        <td><input type="submit" value="Log In"></td>
+    </tr>
+</table>
+</form>
+{% endblock %}

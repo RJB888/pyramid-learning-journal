@@ -69,3 +69,9 @@ Test create_view redirect -
 Test update_view redirect - 
     Test that the update view redirects to the proper detail page after database update.
 
+Test login allows access to update and edit routes - 
+    Test that once logged in you can make or edit an entry.
+
+Test that you cannot make an entry or update an entry unless logged in -
+    Test that update rout and edit route give 403 error if not logged in.
+
