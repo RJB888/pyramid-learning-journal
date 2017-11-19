@@ -4,6 +4,7 @@ from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.security import Authenticated, Allow
 from pyramid.session import SignedCookieSessionFactory
+from passlib.apps import custom_app_context as pwd_context
 
 
 class MyRoot(object):
@@ -36,5 +37,14 @@ def includeme(config):
 
 def isauthenticated(username, password):
     """Verify proper username and password."""
-    return username == os.environ.get('AUTH_USERNAME', '')\
-        and password == os.environ.get('AUTH_PASSWORD', '')
+    stored_username = os.environ.get('AUTH_USERNAME', '')
+    stored_password = os.environ.get('AUTH_PASSWORD', '')
+    is_authenticated = False
+    if stored_username and stored_password:
+        if username == stored_username:
+            try:
+                is_authenticated = pwd_context.verify(password,
+                                                      stored_password)
+            except ValueError:
+                pass
+    return is_authenticated
