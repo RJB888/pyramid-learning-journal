@@ -9,7 +9,8 @@ FMT = "%m/%d/%Y"
 
 
 @view_config(route_name='list_view',
-             renderer='robert_pyramid_learning_journal:templates/homepage.jinja2')
+             renderer='robert_pyramid_learning_journal:templates/homepage.jinja2',
+             require_csrf=False)
 def list_view(request):
     """Parse file path and pass it to response to serve home page."""
     j_entries = request.dbsession.query(JournalEntry).order_by(JournalEntry.date.desc()).all()
@@ -80,7 +81,8 @@ def update_view(request):
 
 
 @view_config(route_name='login',
-             renderer='robert_pyramid_learning_journal:templates/login.jinja2')
+             renderer='robert_pyramid_learning_journal:templates/login.jinja2',
+             require_csrf=False)
 def login(request):
     """."""
     if request.method == "GET":

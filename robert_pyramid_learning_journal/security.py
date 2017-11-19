@@ -3,6 +3,7 @@ import os
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid.security import Authenticated, Allow
+from pyramid.session import SignedCookieSessionFactory
 
 
 class MyRoot(object):
@@ -27,8 +28,13 @@ def includeme(config):
     authz_policy = ACLAuthorizationPolicy()
     config.set_authorization_policy(authz_policy)
     config.set_root_factory(MyRoot)
+    session_secret = os.environ.get('SESSION_SECRET', 'itsaseekrit')
+    session_factory = SignedCookieSessionFactory(session_secret)
+    config.set_session_factory(session_factory)
+    config.set_default_csrf_options(require_csrf=True)
 
 
 def isauthenticated(username, password):
     """Verify proper username and password."""
-    return username == os.environ.get('AUTH_USERNAME', '') and password == os.environ.get('AUTH_PASSWORD','')
+    return username == os.environ.get('AUTH_USERNAME', '')\
+        and password == os.environ.get('AUTH_PASSWORD', '')
